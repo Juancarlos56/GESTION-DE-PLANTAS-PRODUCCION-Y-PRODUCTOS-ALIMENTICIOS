@@ -1,0 +1,43 @@
+@if (productos.length == 0) {
+<div class="alert alert-warning">No hay registros en el sistema!</div>
+} @else {
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <!-- <th>id</th> -->
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Fecha de Registro</th>
+            <th>Planta</th>
+            <th>remove</th>
+            <th>update</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (producto of productos; track $index) {
+        <tr>
+            <!-- <td> {{planta.id}} </td> -->
+            <td> {{producto.id}} </td>
+            <td> {{producto.nombre}} </td>
+            <td> {{producto.tipo }} </td>
+            <td> {{producto.fechaRegistro}} </td>
+            <td> {{producto.plantaId}} </td>
+            <td>
+                <button class="btn btn-danger btn-sm"
+                (click)="onRemoveProducto(producto.id)"
+                >
+                    remove
+                </button>
+            </td>
+            <td>
+                <button class="btn btn-info btn-sm"
+                (click)="onSelectedProducto(producto)">
+                    update
+                </button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+}

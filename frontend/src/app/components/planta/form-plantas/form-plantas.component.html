@@ -1,1 +1,51 @@
-<p>form-plantas works!</p>
+<div class="modal" tabindex="-1" style="display: block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Form {{(planta.id > 0)? 'Update': 'Create'}} planta</h5>
+                <button 
+                (click)="onOpenClose()"
+                type="button" 
+                class="btn-close" 
+                data-bs-dismiss="modal" 
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form (ngSubmit)="onSubmit(plantaForm)" #plantaForm="ngForm">
+
+                    <div>
+                        <input placeholder="Name" name="name" [(ngModel)]="planta.nombre" class="form-control my-2" required
+                            #name="ngModel">
+
+                        @if (name.invalid && (name.dirty || name.touched)) {
+                        @if(name.errors!['required']){
+                        <div class="text-danger">
+                            Nombre es requerido
+                        </div>
+                        }
+                        }
+                    </div>
+                    <div>
+                        <input placeholder="ubicacion" name="ubicacion" [(ngModel)]="planta.ubicacion"
+                            class="form-control my-2" #ubicacion="ngModel">
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary m-2" [disabled]="plantaForm.invalid">
+                            {{(planta.id > 0)? 'Update': 'Create'}}
+                        </button>
+
+                        <button type="button" class="btn btn-secondary my-2" (click)="onClear(plantaForm)">
+                            Clear
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                (click)="onOpenClose()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

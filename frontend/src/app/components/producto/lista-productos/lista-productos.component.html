@@ -1,1 +1,18 @@
-<p>lista-productos works!</p>
+<div class="container my-4">
+    <h3>{{title}}</h3>
+
+    <button class="btn btn-primary" (click)="setOpen()">{{open == true? 'Cerrar': 'Crear Producto'}}</button>
+    <div class="row">
+
+        <div class="col">
+            <app-producto [productos]="productos" (idProductoEventEmitter)="removeProducto($event)"
+                (selectdProductoEventEmitter)="setSelectedProducto($event)" />
+        </div>
+
+    </div>
+</div>
+@if (open) {
+    <div class="abrir-modal animacion fadeIn">
+        <app-form-productos [producto]="productoSelected" (newPlantaEventEmitter)="addProducto($event)" (openEventEmitter)="setOpen()"/>
+    </div>
+}

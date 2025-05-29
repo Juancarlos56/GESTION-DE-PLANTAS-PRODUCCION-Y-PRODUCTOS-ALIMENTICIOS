@@ -1,1 +1,18 @@
-<p>lista-plantas works!</p>
+<div class="container my-4">
+    <h3>{{title}}</h3>
+
+    <button class="btn btn-primary" (click)="setOpen()">{{open == true? 'Cerrar': 'Crear Planta'}}</button>
+    <div class="row">
+
+        <div class="col">
+            <app-planta [plantas]="plantas" (idPlantaEventEmitter)="removePlanta($event)"
+                (selectdPlantaEventEmitter)="setSelectedPlanta($event)" />
+        </div>
+
+    </div>
+</div>
+@if (open) {
+    <div class="abrir-modal animacion fadeIn">
+        <app-form-plantas [planta]="plantaSelected" (newPlantaEventEmitter)="addPlanta($event)" (openEventEmitter)="setOpen()"/>
+    </div>
+}

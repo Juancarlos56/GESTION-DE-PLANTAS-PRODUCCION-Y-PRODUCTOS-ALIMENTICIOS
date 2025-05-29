@@ -1,0 +1,39 @@
+@if (plantas.length == 0) {
+<div class="alert alert-warning">No hay registros en el sistema!</div>
+} @else {
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <!-- <th>id</th> -->
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Ubicacion</th>
+            <th>remove</th>
+            <th>update</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (planta of plantas; track $index) {
+        <tr>
+            <!-- <td> {{planta.id}} </td> -->
+            <td> {{planta.id}} </td>
+            <td> {{planta.nombre}} </td>
+            <td> {{planta.ubicacion}} </td>
+            <td>
+                <button class="btn btn-danger btn-sm"
+                (click)="onRemovePlanta(planta.id)"
+                >
+                    remove
+                </button>
+            </td>
+            <td>
+                <button class="btn btn-info btn-sm"
+                (click)="onSelectedPlanta(planta)">
+                    update
+                </button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+}

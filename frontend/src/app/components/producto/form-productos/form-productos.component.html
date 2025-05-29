@@ -1,1 +1,62 @@
-<p>form-productos works!</p>
+<div class="modal" tabindex="-1" style="display: block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Form {{(producto.id > 0)? 'Update': 'Create'}} producto</h5>
+                <button 
+                (click)="onOpenClose()"
+                type="button" 
+                class="btn-close" 
+                data-bs-dismiss="modal" 
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form (ngSubmit)="onSubmit(productoForm)" #productoForm="ngForm">
+
+                    <div>
+                        <input placeholder="Name" name="name" [(ngModel)]="producto.nombre" class="form-control my-2" required
+                            #name="ngModel">
+
+                        @if (name.invalid && (name.dirty || name.touched)) {
+                            @if(name.errors!['required']){
+                            <div class="text-danger">
+                                Nombre es requerido
+                            </div>
+                            }
+                        }
+                    </div>
+                    <div>
+                        <input placeholder="tipo" name="tipo" [(ngModel)]="producto.tipo"
+                            class="form-control my-2" #tipo="ngModel">
+                    </div>
+                    <div>
+                        <input placeholder="plantaId" name="plantaId" [(ngModel)]="producto.plantaId" class="form-control my-2" required
+                            #plantaId="ngModel">
+
+                        @if (plantaId.invalid && (plantaId.dirty || plantaId.touched)) {
+                            @if(plantaId.errors!['required']){
+                            <div class="text-danger">
+                                Id de Planta es requerido
+                            </div>
+                            }
+                        }
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary m-2" [disabled]="productoForm.invalid">
+                            {{(producto.id > 0)? 'Update': 'Create'}}
+                        </button>
+
+                        <button type="button" class="btn btn-secondary my-2" (click)="onClear(productoForm)">
+                            Clear
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                (click)="onOpenClose()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
