@@ -1,11 +1,14 @@
 package com.alimentos.danec.backend.services;
 
+import com.alimentos.danec.backend.dto.ProductoDTO;
 import com.alimentos.danec.backend.entities.Planta;
 import com.alimentos.danec.backend.entities.Producto;
 import com.alimentos.danec.backend.repositories.PlantaRepository;
 import com.alimentos.danec.backend.repositories.ProductoRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,23 +47,33 @@ public class ProductoServiceImp implements ProductoService{
     @Transactional
     public Producto crear(Long plantaId, Producto producto) {
         Planta planta = this.plantaRepository.findById(plantaId)
-                .orElseThrow(() -> new RuntimeException("Planta no encontrada con ID: " + plantaId));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "No se encontró la planta con ID: " + plantaId
+                ));
 
         producto.setFechaRegistro(LocalDateTime.now());
         producto.setPlanta(planta);
         return this.productoRepository.save(producto);
     }
 
-    @Override
     @Transactional
-    public Producto actualizar(Long id, Producto datos) {
-        return this.productoRepository.findById(id)
+    @Override
+    public Producto actualizar(Long id, ProductoDTO datos) {
+        Planta nuevaPlanta = plantaRepository.findById(datos.getPlantaId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "No se encontró la planta con ID: " + datos.getPlantaId()
+                ));
+
+        return productoRepository.findById(id)
                 .map(p -> {
                     p.setNombre(datos.getNombre());
                     p.setTipo(datos.getTipo());
-                    return this.productoRepository.save(p);
+                    p.setPlanta(nuevaPlanta);
+                    return productoRepository.save(p);
                 })
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + id));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "No se encontró el producto con ID: " + id
+                ));
     }
 
     @Override

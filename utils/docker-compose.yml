@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql-danec
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: jcbb1234
+      MYSQL_DATABASE: db_backend_danec
+      MYSQL_USER: jcbb
+      MYSQL_PASSWORD: jcbb1234
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin-danec
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: jcbb1234
+    ports:
+      - "8081:80"

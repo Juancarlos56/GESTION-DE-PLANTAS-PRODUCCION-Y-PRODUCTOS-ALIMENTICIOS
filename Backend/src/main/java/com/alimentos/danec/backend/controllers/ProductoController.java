@@ -8,6 +8,7 @@ import com.alimentos.danec.backend.services.ProductoServiceImp;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,14 +48,13 @@ public class ProductoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductoDTO> actualizar(@PathVariable Long id, @RequestBody @Valid ProductoDTO dto) {
-        Optional<Producto> productoOptional = productoService.obtenerPorId(id);
-        if (productoOptional.isPresent()) {
-            Producto actualizado = productoService.actualizar(id, toEntity(dto));
+        try {
+            Producto actualizado = productoService.actualizar(id, dto);
             return ResponseEntity.ok(toDTO(actualizado));
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(null);
         }
-        return ResponseEntity.notFound().build();
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
         Optional<Producto> productoOptional = productoService.obtenerPorId(id);

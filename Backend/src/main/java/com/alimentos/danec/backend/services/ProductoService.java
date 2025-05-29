@@ -1,5 +1,6 @@
 package com.alimentos.danec.backend.services;
 
+import com.alimentos.danec.backend.dto.ProductoDTO;
 import com.alimentos.danec.backend.entities.Planta;
 import com.alimentos.danec.backend.entities.Producto;
 
@@ -12,6 +13,6 @@ public interface ProductoService {
     public List<Producto> obtenerPorPlanta(Long plantaId);
     public Optional<Producto> obtenerPorId(Long id);
     public Producto crear(Long plantaId, Producto producto);
-    public Producto actualizar(Long id, Producto datos);
+    public Producto actualizar(Long id, ProductoDTO datos);
     public void eliminar(Long id);
 }
