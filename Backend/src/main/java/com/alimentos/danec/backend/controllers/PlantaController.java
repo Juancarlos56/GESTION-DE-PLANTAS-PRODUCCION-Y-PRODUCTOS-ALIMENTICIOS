@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/plantas")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PlantaController {
 
     private final PlantaService plantaService;

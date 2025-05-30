@@ -1,5 +1,7 @@
 package com.alimentos.danec.backend.controllers;
 
+import com.alimentos.danec.backend.dto.PlantaDTO;
+import com.alimentos.danec.backend.dto.ProductoAllDTO;
 import com.alimentos.danec.backend.dto.ProductoDTO;
 import com.alimentos.danec.backend.entities.Planta;
 import com.alimentos.danec.backend.entities.Producto;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/productos")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ProductoController {
     private final ProductoService productoService;
 
@@ -24,8 +27,8 @@ public class ProductoController {
     }
 
     @GetMapping
-    public List<ProductoDTO> listarTodos() {
-        return productoService.obtenerTodos().stream().map(this::toDTO).collect(Collectors.toList());
+    public List<ProductoAllDTO> listarTodos() {
+        return productoService.obtenerTodos().stream().map(this::toDTOAll).collect(Collectors.toList());
     }
 
     @GetMapping("/planta/{plantaId}")
@@ -41,16 +44,16 @@ public class ProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductoDTO> crear(@RequestBody @Valid ProductoDTO dto) {
+    public ResponseEntity<ProductoAllDTO> crear(@RequestBody @Valid ProductoDTO dto) {
         Producto creado = productoService.crear(dto.getPlantaId(), toEntity(dto));
-        return ResponseEntity.ok(toDTO(creado));
+        return ResponseEntity.ok(toDTOAll(creado));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductoDTO> actualizar(@PathVariable Long id, @RequestBody @Valid ProductoDTO dto) {
+    public ResponseEntity<ProductoAllDTO> actualizar(@PathVariable Long id, @RequestBody @Valid ProductoDTO dto) {
         try {
             Producto actualizado = productoService.actualizar(id, dto);
-            return ResponseEntity.ok(toDTO(actualizado));
+            return ResponseEntity.ok(toDTOAll(actualizado));
         } catch (ResponseStatusException ex) {
             return ResponseEntity.status(ex.getStatusCode()).body(null);
         }
@@ -72,6 +75,17 @@ public class ProductoController {
         dto.setTipo(p.getTipo());
         dto.setFechaRegistro(p.getFechaRegistro());
         dto.setPlantaId(p.getPlanta().getId());
+        return dto;
+    }
+
+    private ProductoAllDTO toDTOAll(Producto p) {
+        ProductoAllDTO dto = new ProductoAllDTO();
+        dto.setId(p.getId());
+        dto.setNombre(p.getNombre());
+        dto.setFechaRegistro(p.getFechaRegistro());
+        dto.setPlantaId(p.getPlanta().getId());
+        dto.setTipo(p.getTipo());
+        dto.setPlantaNombre(p.getPlanta().getNombre());
         return dto;
     }
 
