@@ -13,7 +13,7 @@
             <div class="modal-body">
 
                 <form (ngSubmit)="onSubmit(productoForm)" #productoForm="ngForm">
-
+                    <label for="plantaId">Informacion para el producto:</label>
                     <div>
                         <input placeholder="Name" name="name" [(ngModel)]="producto.nombre" class="form-control my-2" required
                             #name="ngModel">
@@ -31,16 +31,22 @@
                             class="form-control my-2" #tipo="ngModel">
                     </div>
                     <div>
-                        <input placeholder="plantaId" name="plantaId" [(ngModel)]="producto.plantaId" class="form-control my-2" required
-                            #plantaId="ngModel">
+                        <label for="plantaId">Selecciona una Planta:</label>
+                        <select name="plantaId" [(ngModel)]="producto.plantaId" class="form-control my-2" required #plantaId="ngModel">
+                        <option [ngValue]="null" disabled selected>Seleccione una planta</option>
+                        <option *ngFor="let planta of plantas" [ngValue]="planta.id">
+                            {{ planta.nombre }}
+                        </option>
+                        </select>
 
                         @if (plantaId.invalid && (plantaId.dirty || plantaId.touched)) {
-                            @if(plantaId.errors!['required']){
-                            <div class="text-danger">
-                                Id de Planta es requerido
-                            </div>
+                            @if (plantaId.errors?.['required']) {
+                                <div class="text-danger">
+                                Debe seleccionar una planta
+                                </div>
                             }
                         }
+
                     </div>
                     <div>
                         <button type="submit" class="btn btn-primary m-2" [disabled]="productoForm.invalid">
