@@ -47,6 +47,19 @@ cd backend
 ./mvnw spring-boot:run
 ```
 
+### ▶️ Ejecutar con JAR
+
+1. Ir al directorio del proyecto:
+   ```bash
+   cd release
+   ```
+2. Ejecutar el archivo .jar:
+```bash
+   java -jar backend.jar
+```
+
+Asegúrate de tener Java 17 o superior instalado.
+
 El backend quedará disponible en:
 - http://localhost:8080/api/plantas
 - http://localhost:8080/api/productos
@@ -80,6 +93,7 @@ ng serve
 │   └── src/main/java/... → Spring Boot API
 ├── frontend
 │   └── src/app → Angular standalone app
+├── release/             # Archivo JAR empaquetado listo para ejecutar
 ├── utils
 │   └── docker-compose.yml → MySQL + phpMyAdmin
 └── README.md
