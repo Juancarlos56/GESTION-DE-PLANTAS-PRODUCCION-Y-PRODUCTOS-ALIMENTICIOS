@@ -1,16 +1,15 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-//import { HttpClient } from '@angular/common/http';
+import axios from 'axios';
 import { Planta } from '../models/planta.model';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class PlantaService {
 
   private apiUrl = `${environment.apiUrl}/plantas`;
-
+  //private http = inject(HttpClient);
   private plantas: Planta[] = [
       {
         "id": 1,
@@ -39,27 +38,27 @@ export class PlantaService {
       }
   ]
 
-  constructor(/*private http: HttpClient*/) {}
+  constructor(private http: HttpClient) {}
 
   getAll(): Observable<Planta[]> {
-    //return this.http.get<Planta[]>(this.apiUrl);
-    return of(this.plantas);
+    return this.http.get<Planta[]>(this.apiUrl);
   }
 
-  /*
+  
   getById(id: number): Observable<Planta> {
     return this.http.get<Planta>(`${this.apiUrl}/${id}`);
   }
 
   create(planta: Planta): Observable<Planta> {
+    console.log(planta)
     return this.http.post<Planta>(this.apiUrl, planta);
   }
 
-  update(id: number, planta: Planta): Observable<Planta> {
-    return this.http.put<Planta>(`${this.apiUrl}/${id}`, planta);
+  update(planta: Planta): Observable<Planta> {
+    return this.http.put<Planta>(`${this.apiUrl}/${planta.id}`, planta);
   }
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }*/
+  }
 }

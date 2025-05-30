@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Planta } from '../../../models/planta.model';
 //import { PlantaService } from '../../../services/planta.service';
 import Swal from 'sweetalert2';
@@ -21,6 +21,8 @@ export class ListaPlantasComponent implements OnInit{
   plantas: Planta[] = [];
   loading: boolean = true;
 
+  @Output() plantaRefresh= new EventEmitter<number>();
+
   constructor(private plantaService: PlantaService) {
       this.plantaSelected = new Planta();
   }
@@ -40,15 +42,52 @@ export class ListaPlantasComponent implements OnInit{
 
    addPlanta(planta: Planta) {
     if (planta.id > 0) {
-      this.plantas = this.plantas.map(u => (u.id == planta.id) ? { ...planta } : u);
+      this.plantaService.update(planta).subscribe({
+        next: (plantaUpdated) => {
+          this.plantas = this.plantas.map(p =>
+            p.id === plantaUpdated.id ? { ...plantaUpdated } : p
+          );
+
+          Swal.fire({
+            title: 'Actualizado!',
+            text: 'Planta actualizada con éxito!',
+            icon: 'success'
+          });
+          this.plantaRefresh.emit(plantaUpdated.id);
+        },
+        error: (err) => {
+          console.error('Error al actualizar planta:', err);
+
+          Swal.fire({
+            title: 'Error!',
+            text: err?.error?.message || 'No se pudo actualizar la planta.',
+            icon: 'error'
+          });
+        }
+      });
     } else {
-      this.plantas = [... this.plantas, { ...planta, id: new Date().getTime() }];
+      this.plantaService.create(planta).subscribe({
+        next: (plantaNew) => {
+          this.plantas = [...this.plantas, { ...plantaNew }];
+
+          Swal.fire({
+            title: 'Guardado!',
+            text: 'Planta guardada con éxito!',
+            icon: 'success'
+          });
+          this.plantaRefresh.emit(plantaNew.id);
+        },
+        error: (err) => {
+          console.error('Error al guardar planta:', err);
+
+          Swal.fire({
+            title: 'Error!',
+            text: err?.error?.message || 'No se pudo guardar la planta.',
+            icon: 'error'
+          });
+        }
+      });
     }
-    Swal.fire({
-      title: "Guardado!",
-      text: "Usuario guardado con exito!",
-      icon: "success"
-    });
     this.plantaSelected = new Planta();
     this.setOpen();
   }
@@ -64,11 +103,14 @@ export class ListaPlantasComponent implements OnInit{
       confirmButtonText: "Si"
     }).then((result:any) => {
       if (result.isConfirmed) {
-        this.plantas = this.plantas.filter(planta => planta.id != id);
-        Swal.fire({
-          title: "Eliminado!",
-          text: "Usuario eliminado con exito.",
-          icon: "success"
+        this.plantaService.delete(id).subscribe(()=>{
+          this.plantas = this.plantas.filter(planta => planta.id != id);
+          Swal.fire({
+            title: "Eliminado!",
+            text: "Usuario eliminado con exito.",
+            icon: "success"
+          });
+          this.plantaRefresh.emit(id);
         });
       }
     });

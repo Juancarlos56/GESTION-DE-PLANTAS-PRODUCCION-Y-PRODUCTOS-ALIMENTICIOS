@@ -12,4 +12,5 @@ export class Producto {
   tipo?: string;
   fechaRegistro?: string;
   plantaId!: number;
+  plantaNombre!: string;
 }

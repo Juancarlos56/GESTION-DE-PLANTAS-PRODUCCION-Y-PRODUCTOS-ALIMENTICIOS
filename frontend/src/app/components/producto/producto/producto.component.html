@@ -21,7 +21,7 @@
             <td> {{producto.id}} </td>
             <td> {{producto.nombre}} </td>
             <td> {{producto.tipo }} </td>
-            <td> {{producto.fechaRegistro}} </td>
+            <td> {{producto.fechaRegistro | date:'dd/MM/yyyy HH:mm:ss'}} </td>
             <td> {{producto.plantaId}} </td>
             <td>
                 <button class="btn btn-danger btn-sm"
